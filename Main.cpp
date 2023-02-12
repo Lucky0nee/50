@@ -2,11 +2,12 @@
 #include <vector>
 using namespace std;
 
-int g_id = 1;
+int g_DefId = 1, g_CredId = 1, g_DepId = 1;
+
 class Account {
 public:
     Account() {
-        this->id = g_id;
+        this->id = 1;
         this->balance = 0.f;
 
         this->name = "Empty";
@@ -17,23 +18,23 @@ public:
 
     void TopUpBalance() {
         cout << "Top up account: "; float tempBalance; cin >> tempBalance;
-        if (tempBalance >= 0.f) {
-            this->balance = tempBalance;
-            cout << "Successful\n";
+        if (tempBalance >= 0) {
+            balance += tempBalance;
+            cout << "Successful\n\n\n\n";
         }
         else {
-            cout << "Balance cannot be negative\n";
+            cout << "Balance cannot be negative\n\n\n\n";
         }
     }
 
     void WithdrawMoney() {
         cout << "Withdraw money: "; float tempBalance; cin >> tempBalance;
-        if (this->balance - tempBalance >= 0.f) {
+        if ((this->balance - tempBalance) >= 0) {
             this->balance -= tempBalance;
-            cout << "Successful\n";
+            cout << "Successful\n\n\n\n";
         }
         else {
-            cout << "Balance cannot be negative\n";
+            cout << "Balance cannot be negative\n\n\n\n";
         }
     }
 
@@ -42,7 +43,7 @@ public:
         cout << "Currency type: ";  cin >> type;
         cout << "Top up account: ";  cin >> balance;
 
-        this->id = g_id; g_id++;
+        this->id = g_DefId; g_DefId++;
         this->compName = "Bank #11";
         this->additionalAnalytic = "Empty";
 
@@ -55,12 +56,12 @@ public:
         cout << "2. Balance: " << balance << type << "\n";
         cout << "3. Name:" << name << "\n";
         cout << "4. Company name: " << compName << "\n";
-        cout << "5. Additional Analytic: " << additionalAnalytic << "\n";
+        cout << "5. Additional Analytic: " << additionalAnalytic << "\n\n\n\n";
     }
 
 protected:
     int id; // 123132412
-    float balance; // balance
+    int balance; // balance
     string name; // name
     string type; // $
     string compName; // Bank #10
@@ -70,11 +71,24 @@ protected:
 class Credit : public Account {
 public:
     void WithdrawMoney() {
-        cout << "Withdraw money: "; cin >> this->balance;
-        cout << "Successful\n";
+        float temp;
+        cout << "Withdraw money: "; cin >> temp; this->balance -= temp;
+        cout << "Successful\n\n\n\n";
         if (this->balance < 0) {
             additionalAnalytic = "30%";
         }
+    }
+
+    void CreateAccount() {
+        cout << "Set name of account: ";  cin >> name;
+        cout << "Currency type: ";  cin >> type;
+        cout << "Top up account: ";  cin >> balance;
+
+        this->id = g_CredId; g_CredId++;
+        this->compName = "Bank #11";
+        this->additionalAnalytic = "Empty";
+
+        GetInfo();
     }
 };
 
@@ -90,6 +104,17 @@ public:
         cout << "6. Deposit expiry date: " << anotherInfo.day << "/" << anotherInfo.month << "/" << anotherInfo.year << "\n";
     }
 
+    void CreateAccount() {
+        cout << "Set name of account: ";  cin >> name;
+        cout << "Currency type: ";  cin >> type;
+        cout << "Top up account: ";  cin >> balance;
+
+        this->id = g_DepId; g_DepId++;
+        this->compName = "Bank #11";
+        this->additionalAnalytic = "Empty";
+
+        GetInfo();
+    }
 protected:
     struct Another {
         int day = 19;
@@ -105,7 +130,7 @@ int main() {
 
     int line;
     while (true) {
-        cout << "1. Create account\n";
+        cout << "\n\n1. Create account\n";
         cout << "2. Withdraw\n";
         cout << "3. Top up\n";
         cout << "4. Show account\n";
@@ -117,65 +142,53 @@ int main() {
             if (line == 1) {
                 TempDefaultAccount.CreateAccount();
                 DefaultAccount.push_back(TempDefaultAccount);
-                system("pause"); system("cls");
             }
             else if (line == 2) {
                 TempCreditAccount.CreateAccount();
                 CreditAccount.push_back(TempCreditAccount);
-                system("pause"); system("cls");
             }
             else if (line == 3) {
                 TempDepositAccount.CreateAccount();
                 DepositAccount.push_back(TempDepositAccount);
-                system("pause"); system("cls");
             }
             else {
                 cout << "Unknown command, try again\n";
-                system("pause"); system("cls");
             }
             break;
         case 2:
             cout << "Account type (Default - 1; Credit - 2; Deposit - 3):"; cin >> line;
             if (line == 1) {
                 cout << "Write id:"; cin >> line;
-                DefaultAccount[line].WithdrawMoney();
-                system("pause"); system("cls");
+                DefaultAccount[line - 1].WithdrawMoney();
             }
             else if (line == 2) {
                 cout << "Write id:"; cin >> line;
-                CreditAccount[line].WithdrawMoney();
-                system("pause"); system("cls");
+                CreditAccount[line - 1].WithdrawMoney();
             }
             else if (line == 3) {
                 cout << "Write id:"; cin >> line;
-                DepositAccount[line].WithdrawMoney();
-                system("pause"); system("cls");
+                DepositAccount[line - 1].WithdrawMoney();
             }
             else {
                 cout << "Unknown command, try again\n";
-                system("pause"); system("cls");
             }
             break;
         case 3:
             cout << "Account type (Default - 1; Credit - 2; Deposit - 3):"; cin >> line;
             if (line == 1) {
                 cout << "Write id:"; cin >> line;
-                DefaultAccount[line].TopUpBalance();
-                system("pause"); system("cls");
+                DefaultAccount[line - 1].TopUpBalance();
             }
             else if (line == 2) {
                 cout << "Write id:"; cin >> line;
-                CreditAccount[line].TopUpBalance();
-                system("pause"); system("cls");
+                CreditAccount[line - 1].TopUpBalance();
             }
             else if (line == 3) {
                 cout << "Write id:"; cin >> line;
-                DepositAccount[line].TopUpBalance();
-                system("pause"); system("cls");
+                DepositAccount[line - 1].TopUpBalance();
             }
             else {
                 cout << "Unknown command, try again\n";
-                system("pause"); system("cls");
             }
             break;
         case 4:
@@ -183,26 +196,21 @@ int main() {
             if (line == 1) {
                 cout << "Write id:"; cin >> line;
                 DefaultAccount[line - 1].GetInfo();
-                system("pause"); system("cls");
             }
             else if (line == 2) {
                 cout << "Write id:"; cin >> line;
                 CreditAccount[line - 1].GetInfo();
-                system("pause"); system("cls");
             }
             else if (line == 3) {
                 cout << "Write id:"; cin >> line;
                 DepositAccount[line - 1].GetInfo();
-                system("pause"); system("cls");
             }
             else {
                 cout << "Unknown command, try again\n";
-                system("pause"); system("cls");
             }
             break;
         default:
             cout << "Unknown command, try again\n";
-            system("pause"); system("cls");
             break;
         }
     }
@@ -213,17 +221,13 @@ int main() {
 /*
 Написати клас Рахунок, в якому мають бути передбачені наступні властивості:
 1) ідентифікатор;
-6) залишок;
 2) назва;
 3) валюта;
 4) установа, де рахунок відкритий;
 5) додаткова аналітика;
-
-На основі попереднього класу створіть успадковані класи Кредитний і Депозитний.
-Особливістю класу Кредитний має бути те,
-
-що залишок може бути від’ємний. В додатковій аналітиці має бути відсоток, який
-нараховується на залишок.
-
-Має появитися нове поле “інше”, де має бути прогнозована дата закінчення депозита або кредита.
+6) залишок;
+На основі попереднього класу створіть успадковані класи Кредитний і Депозитний. Особливістю класу
+Кредитний має бути те, що залишок може бути від’ємний. В додатковій аналітиці має бути відсоток, який
+нараховується на залишок. Має появитися нове поле “інше”, де має бути прогнозована дата закінчення депозита або
+кредита.
 */
